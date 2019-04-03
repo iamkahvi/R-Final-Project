@@ -20,7 +20,7 @@ at those times.
 
 ```{r}
 #read in .csv file
-salary<-read.csv('salaryInfo.csv')  
+salary<-read.csv('../Data/salaryInfo.csv')  
 summary(salary)
 
 #convert to short names
