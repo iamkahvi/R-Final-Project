@@ -71,6 +71,11 @@ dim(ywt1)
 n<-dim(ywt1)[1]
 summary(ywt1$SalMonth)
 
+salarynz %>%
+  filter(WTNum %in% c("W-1","W-2")) %>%
+  ggplot(aes(x=SalMonth)) +
+  geom_histogram() + 
+  facet_wrap(~WTNum)
 
 hist(ywt1$SalMonth, main='Work Term 1 Salaries', xlab='Monthly Salaries $')
 

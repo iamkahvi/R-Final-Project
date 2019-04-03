@@ -34,7 +34,7 @@ boxplot(df$ADL)
 
 ### 3. Produce the scatterplots of Y and the X’s. Comment. Is a linear model appropriate for this data? Why or why not? Are the X’s correlated amongst themselves.
 
-A linear model is not appropriate for the regression variables ADL or COG. However, MEM looks to be somewhat linear in its behaviour according to the scatterplot.
+A linear model may be appropriate for the regression variables ADL, MEM and COG. The relationship would be scattered for all three variables. The relation for ADL and MEM would be positive. The relation for COG would be negative.
 
 ```{r}
 plot(df$ADL, df$KBI,
@@ -51,7 +51,41 @@ plot(df$COG, df$KBI,
 ```
 
 ### 4. Fit univariable linear models, Y versus Xi for each of the three X regressor variables. 
+
+```{r}
+lmADL = lm(KBI~ADL, data = df)
+lmMEM = lm(KBI~MEM, data = df)
+lmCOG = lm(KBI~COG, data = df)
+```
+
 a. What are the estimated regression models?
+```{r}
+summary(lmADL)
+summary(lmMEM)
+summary(lmCOG)
+```
 b. Compare the univariable models above.
+```{r}
+plot(df$ADL, df$KBI,
+     main='KBI vs ADL',
+     xlab="total activities of daily living", ylab="Korean Burden Inventory")
+abline(lmADL, col="blue")
+
+plot(df$MEM, df$KBI,
+     main='KBI vs MEM',
+     xlab="memory and behavioral problems", ylab="Korean Burden Inventory")
+abline(lmMEM, col="blue")
+
+plot(df$COG, df$KBI,
+     main='KBI vs COG',
+     xlab="cognitive impairment", ylab="Korean Burden Inventory")
+abline(lmCOG, col="blue")
+```
 c. Check the fit of the models and comment.
+
+```{r}
+summary(lmADL)$r.squared
+summary(lmMEM)$r.squared
+summary(lmCOG)$r.squared
+```
 d. Explain each of the estimated regression parameters (except the intercept) in words.
