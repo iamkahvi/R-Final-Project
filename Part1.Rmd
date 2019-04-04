@@ -3,16 +3,11 @@ title: "Part 1"
 author: "Kahvi Patel"
 output: html_document
 ---
-After reading in the data into R using the read_excel (library(readxl))function, provide descriptive statistics for the data. Comment on your results and especially on any unusual features in the data. To read in your data, put the excel file in your working directory, then read in the file using the following code:
-
-X919report_data <- read_excel("919report_data.xlsx")
 
 #### Loading Libraries
 ```{r echo = T, results = 'hide'}
-library(readr)
 library(lubridate)
 library(tidyverse)
-library(tidyr)
 library(viridis)
 library(scales)
 ```
@@ -106,7 +101,7 @@ ggplot(data.frame(ds$Time), aes(x=as.POSIXct(strptime(ds$Time, format="%H:%M:%S"
   geom_histogram() +
   xlab("Time") + 
   ylab("Frequency") +
-  scale_x_datetime(breaks = date_breaks("2 hour"), labels = date_format("%I:%M %p"))
+  scale_x_datetime(breaks = date_breaks("3 hour"), labels = date_format("%I:%M %p"))
 ```
 
 ## 3. Number of Overdose Calls to ambulance
@@ -125,14 +120,19 @@ print(calls)
 
 ## 5. Is there a correlation between the time of incident and the site of incident?
 
-```{r}
-ggplot(ds, aes(x=Time, y=Location)) + 
-  geom_point()
+It seems like there are more incidents in the evening when the patient is a Drop-In. Also there are more incidents in the night when the patient is in the Courtyard.
 
+```{r}
 ggplot(ds, aes(x = as.POSIXct(strptime(ds$Time, format="%H:%M:%S")),
                fill = Location,
                color = factor(Location))) + 
   geom_freqpoly() +
+  xlab("Time") +
   scale_x_datetime(breaks = date_breaks("6 hour"), labels = date_format("%I:%M %p")) +
   scale_color_viridis(discrete = TRUE, "", direction = -1)
+
+ggplot(ds, aes(x = as.POSIXct(strptime(ds$Time, format="%H:%M:%S")), y=Location)) + 
+  geom_point() +
+  scale_x_datetime(breaks = date_breaks("3 hour"), labels = date_format("%I:%M %p")) +
+  xlab("Time")
 ```
