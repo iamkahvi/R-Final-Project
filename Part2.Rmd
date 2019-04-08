@@ -4,12 +4,6 @@ author: "Kahvi Patel"
 output: html_document
 ---
 
-ADL: (X1) total activities of daily living (low scores indicate that the elderly perform activities independently).
-
-MEM: (X2) memory and behavioral problems (higher scores indicate more problems).
-
-COG: (X3) cognitive impairment (lower scores indicate a greater degree of cognitive impairment).
-
 ## Data Import and Cleaning
 ```{r}
 library(scales)
@@ -21,13 +15,22 @@ df <- read.csv('Data/stat123_regression.csv')
 ### 1. After reading the data into R using the read.csv function, provide summary of the data. Comment on your results and especially on any unusual features in the data.
 
 The variables are spread in different ways. The KBI has values from 28 to 115 while the COG has values from 0 to 27. Therefore, it seems like none of the variable were scaled in the same way, or else they would have similar maxes and mins.
+The histograms of each variable show that:
+- The distribution of the KBI variable is roughly symmetric and unimodal. There doesn't appear to be any outliers.
+- The distribution of the ADL variable is not symmetric.
+- The distribution of the COG variable is not symmetric and bimodal. The distribution is also weakly skewed to the left.
+- The distribution of the MEM variable is unimodal and skewed to the left.
 
 ```{r}
 summary(df)
+hist(df$KBI)
+hist(df$ADL)
+hist(df$COG)
+hist(df$MEM)
 ```
 ### 2. Produce the boxplot of ADL. Comment. Are there any outliers?
 
-No, It doesn't look like there are any outliers. In fact, the boplot looks normally spread and not extremely skewed.
+No, there doesn't appear to be any outliers. In fact, the boxplot looks normally spread and not  skewed.
 
 ```{r}
 boxplot(df$ADL)
@@ -98,11 +101,11 @@ Coefficients:
 - The slope coeficient is the value in the second row of the Estimates column. This value represents how much the Y value (KBI) increases for one step in the X value or regression variable.
 
 Residual standard error:
-- The residual standard error is the amount 
+- Residuals are the difference between the actual observed regression values and the response values that the model predicted.
 
 Multiple R-squared:
 - The r-squared value represents the measure of the linear relationship between our regression variable and our response variable.
 
 F-statistic:
-- The F-test lets us quantify how well our data fits a model. The F-statistic = Sum of squares for regression/Sums of squares for error. 
+- The F-test lets us quantify how well our data fits a model. The F-statistic = (Sum of squares for regression)/(Sums of squares for error). 
 - The p-value indicates how likely our null hypothesis (in this case a slope of zero) is. The scientific consensus is that if our p-value is < 0.05, then the result is statistically significant and the null hypothesis is rejected.
