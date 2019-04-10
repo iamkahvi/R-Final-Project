@@ -5,7 +5,7 @@ output: html_document
 ---
 
 #### Loading Libraries
-```{r echo = T, results = 'hide'}
+```{r echo = T, results = 'hide', message=FALSE, warning=FALSE}
 library(tidyverse)
 library(viridis)
 library(scales)
@@ -81,6 +81,7 @@ ds = ds %>%
   separate(Location, "Location", sep = ",", remove = TRUE)
 
 ds$Location <- factor(ds$Location)
+
 ds$Location <- fct_infreq(ds$Location)
 
 ```
@@ -94,15 +95,16 @@ summary(ds)
 ## 2. Are there more incidents at the end of the day?
 Yes. There are more incidents in the afternoon/evening than in the morning.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 ggplot(data.frame(ds$Time_Of_Day), aes(x=ds$Time_Of_Day)) +
   geom_bar() + 
-  xlab("Time of Day")
+  xlab("Time of Day") +
+  ylab("# of Incidents")
 
 ggplot(data.frame(ds$Time), aes(x=as.POSIXct(strptime(ds$Time, format="%H:%M:%S")))) +
   geom_histogram() +
   xlab("Time") + 
-  ylab("Frequency") +
+  ylab("# of Incidents") +
   scale_x_datetime(breaks = date_breaks("3 hour"), labels = date_format("%I:%M %p"))
 ```
 
@@ -124,19 +126,20 @@ print(calls)
 
 It seems like there are more incidents after 5PM when the patient is a Drop-In. There are more incidents in the night when the patient is in the Courtyard. Aside from those two locations, the frequency of incidents in the other locations is moderately constant throughout the day.
 
-```{r}
-ggplot(ds, aes(x = as.POSIXct(strptime(ds$Time, format="%H:%M:%S")),
-               fill = Location,
+```{r message=FALSE, warning=FALSE}
+ggplot(data = subset(ds, !is.na(Location)), aes(x = as.POSIXct(strptime(Time, format="%H:%M:%S")),
                color = factor(Location))) + 
   geom_freqpoly() +
   xlab("Time") +
-  scale_x_datetime(breaks = date_breaks("6 hour"), labels = date_format("%I:%M %p")) +
-  scale_color_viridis(discrete = TRUE, "", direction = -1)
+  ylab("# of Incidents") +
+  scale_x_datetime(breaks = date_breaks("4 hour"), labels = date_format("%I:%M %p")) +
+  labs(color = "Location")
 
-ggplot(ds, aes(x = as.POSIXct(strptime(ds$Time, format="%H:%M:%S")), 
-               y=Location,
+ggplot(data = subset(ds, !is.na(Location)), aes(x = as.POSIXct(strptime(Time, format="%H:%M:%S")), 
+               y = Location,
                color = factor(Location))) + 
   geom_point() +
-  scale_x_datetime(breaks = date_breaks("3 hour"), labels = date_format("%I:%M %p")) +
-  xlab("Time")
+  scale_x_datetime(breaks = date_breaks("4 hour"), labels = date_format("%I:%M %p")) +
+  xlab("Time") +
+  guides(color = FALSE)
 ```
